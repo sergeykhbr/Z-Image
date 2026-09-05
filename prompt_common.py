@@ -1,20 +1,42 @@
 
-GLOBAL_COMPOSITION_TYPED = {}
-GLOBAL_COMPOSITION_TYPED['tower']=""
-GLOBAL_COMPOSITION_TYPED['cloud']="""
+GLOBAL_COMPOSITION = {}
+GLOBAL_COMPOSITION["tower"] = """
+high-vantage point,
+bird's eye view,
+flat isometric ground projection,
+average perspective distortion,
+large readable silhouette,
+visually balanced proportions.
+clean white space background.
+"""
+
+GLOBAL_COMPOSITION["cloud"] = """
+high-vantage point,
+bird's eye view,
 extreme elliptical compression matching a 60 degree camera looking down at a floor plane,
 completely horizontal orientation,
 no vertical rotation,
-no z-axis rotation,
+no z-axis rotation.
+every component is separated by white space.
+separated cleanly by white space.
+"""
+
+GLOBAL_COMPOSITION["unit"] = """
+high-vantage point,
+bird's eye view,
+No parts overlap;
+every component is separated by white space.
+separated cleanly by white space.
 """
 
 
-def compile_prompt(objtype, #'tower', 'cloud'
-                   subject_description,
+def compile_prompt(subject_description,
                    materials_description,
-                   extra_style=""):
+                   extra_style="",
+                   composition_type="tower",
+                   extra_compoistion=""):
     return f"""
-A premium fantasy tower-defense game asset,
+A premium fantasy game asset,
 inspired by classic hand-painted cartoon fantasy strategy games.
 
 {subject_description}
@@ -29,40 +51,30 @@ simplified but highly expressive shapes,
 painterly textures,
 hand-painted highlights and shadows,
 slightly exaggerated architectural and fluids details,
-{extra_style}
 rich warm materials,
 soft bevels,
 rounded edges,
 visible brush-like texture variation,
 appealing fantasy illustration,
-polished professional tower-defense artwork.
+polished professional artwork.
+{extra_style}
 
 The object should feel designed and painted by a fantasy game artist rather
 than photographed or rendered as a realistic 3D model.
 
 COMPOSITION:
-single isolated asset,
-centered in the image,
-full object completely visible from bottom to top,
-three-quarter front view,
-high-vantage point,
-bird's eye view,
-consistent game asset viewing angle 60 degree,
-flat isometric ground projection,
-{GLOBAL_COMPOSITION_TYPED[objtype]}
-average perspective distortion,
-large readable silhouette,
-visually balanced proportions.
+{GLOBAL_COMPOSITION[composition_type]}
+{extra_compoistion}
 
 LIGHTING:
 soft warm directional light from above and slightly from the front,
 gentle painted-looking highlights,
 soft ambient occlusion,
-subtle contact shadow beneath the tower,
-controlled shadows between stone blocks,
+subtle contact shadow beneath the subject,
 warm fantasy-game lighting,
 no dramatic cinematic lighting.
 
+MATERIALS:
 {materials_description}
 
 PRESENTATION:

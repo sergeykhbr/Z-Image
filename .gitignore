@@ -215,4 +215,4 @@ ckpts/
 
 # Ignore generated images
 /*.png
-/output/*.png
+output/
