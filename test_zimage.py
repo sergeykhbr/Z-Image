@@ -1,7 +1,7 @@
 import os
 import torch
 from diffusers import ZImagePipeline
-from game_assets import ArcherTower, HandTower
+from game_assets import ArcherTower, HandTower, RoundIcon
 
 pipe = ZImagePipeline.from_pretrained(
     "Tongyi-MAI/Z-Image-Turbo",
@@ -12,7 +12,7 @@ pipe = ZImagePipeline.from_pretrained(
 # Important for 16 GB VRAM
 pipe.enable_model_cpu_offload()
 
-SEED = 700
+SEED = 580
 
 def generate_asset(objlist, N=1):
     for obj in objlist:
@@ -44,12 +44,16 @@ def generate_asset(objlist, N=1):
 
 
 objlist = [
-    ArcherTower(level=1),
-    ArcherTower(level=2),
-    ArcherTower(level=3),
-    ArcherTower(level=4),
-    ArcherTower(level=5),
-    ArcherTower(level='5-fire'),
-    ArcherTower(level='5-poison'),
+    #ArcherTower(level=1),
+    #ArcherTower(level=2),
+    #ArcherTower(level=3),
+    #ArcherTower(level=4),
+    #ArcherTower(level=5),
+    #ArcherTower(level='5-fire'),
+    #ArcherTower(level='5-poison'),
+    #HandTower(level=1),
+    #HandTower(level=2),
+    #RoundIcon(type='lightning'),
+    RoundIcon(type='poison'),
 ]
 generate_asset(objlist, N=10)

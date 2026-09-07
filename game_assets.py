@@ -80,6 +80,39 @@ COMPOSITION:
 
 # ======================
 #
+class UIAsset(Asset):
+    def __init__(self, type):
+            self.type = type
+
+    @property
+    def namelvl(self):
+        return self.__class__.__name__ + str(self.type)
+
+    def subject(self):
+        return self.SUBJECT[self.type]
+
+    CAMERA = """
+flat front view
+"""
+    COMPOSITION = """
+centered circular icon,
+complete material frame visible,
+subject fully contained within the frame,
+clean white background, no cropping.
+"""
+    FEATURES="""
+intense color richness,
+vibrant highly-saturated colors,
+sharp vivid edge highlights,
+dark brown carved wood,
+circular carved wooden frames,
+irregular dark steel plates and rivets,
+painted material variation and edge highlights.
+"""
+
+
+# ======================
+#
 class Building(Asset):
     def __init__(self, level: int):
             self.level = level
@@ -148,6 +181,40 @@ painted energy and atmospheric texture
     def prompt(self):
         return super().prompt() + "\n\n" + self.EFFECT_STYLE
 
+
+# =========================
+#
+class RoundIcon(UIAsset):
+    SUBJECT = {
+        'archer':"""
+Wooden bow and arrow, green magical background,
+wooden and metal frame with rivets.
+""",
+        "rifle":"""
+Wooden-and-metal rifle pointing diagonally upward, blue magical background,
+wooden and metal frame with rivets.
+""",
+        "cannon":"""
+Heavy dark-metal cannon with wooden and bronze fittings, firing a cannonball, fiery background,
+wooden and metal frame with rivets.
+""",
+        "lightning":"""
+Glowing metal orb emitting bright white-blue branching electric lightning,
+mounted on a small metal pedestal, deep blue background,
+wooden and metal frame with rivets.
+""",
+        "fire":"""
+Bright magical fireball with swirling flames and glowing embers,
+wooden and metal frame with rivets.
+""",
+        "poison":"""
+Green poison flask tilted and inclined,
+it emits toxic bubbles and a poisonous skull-shaped cloud,
+vivid green background, overlapping overlay.
+Wooden and metal frame with rivets.
+The toxic skull cloud explicitly overlays and partially covers the outer
+"""
+    }
 
 # =========================
 #
@@ -229,15 +296,67 @@ painted material variation and edge highlights.
 #
 class HandTower(Building):
 
+    #A fantastical tower formed entirely from a gigantic human hand emerging from the ground.
+    #The wrist and forearm form a broad, solid foundation.
+    #The palm faces upward, with a large magical fireball blazing directly above its center.
+    #Five thick, chunky, slightly curved fingers surround the fireball.
+    #The hand itself IS the tower architecture, not a statue holding a structure.
+
     SUBJECT={
-            1:"""
-A fantastical tower formed entirely from a gigantic human hand emerging from the ground.
-The wrist and forearm form a broad, solid foundation.
-The palm faces upward, with a large magical fireball blazing directly above its center.
-Five thick, chunky, slightly curved fingers surround the fireball.
-The hand itself IS the tower architecture, not a statue holding a structure.
+        1: """
+Large irregular stones arranged in a clear five-pointed pentagram,
+with a bright round magical fireball floating above the exact center.
+""",
+        2: """
+Large irregular stones arranged in a clear five-pointed pentagram,
+with a bright round magical fireball floating above the exact center.
+Five thick stone fingers curve inward around the center,
+cradling the floating fireball.
+""",
+        3: """Large irregular stones arranged in a clear five-pointed pentagram
+forms thick chunky fingers, touching
+bright round magical fireball floating above the exact center.
+""",
+        4: """A developed magical tower formed entirely from a massive
+stone human hand emerging from the ground. The reinforced wrist
+and forearm form a broad solid foundation. The deeply cupped
+upward-facing palm contains a powerful blazing fireball.
+Five thick chunky fingers curve upward around the fireball
+as fortified walls. Additional stone structures, platforms
+and wooden supports are integrated into the hand.
+The hand itself IS the tower architecture.
+""",
+        5: """A fully upgraded imposing magical tower formed
+entirely from a gigantic stone human hand emerging from the ground.
+The massive reinforced wrist and forearm form a broad architectural
+foundation. The deeply cupped upward-facing palm contains
+an enormous intensely blazing magical fireball.
+Five thick chunky fingers curve upward around the fireball
+as fortified protective walls. Reinforced stone structures,
+platforms, battlements and wooden supports are integrated
+into the hand. The hand itself IS the tower architecture.""",
+        '5-physical': """A fully upgraded imposing magical tower
+formed entirely from a gigantic reinforced stone human hand emerging
+from the ground. The massive wrist and forearm form
+a broad solid foundation.
+The deeply cupped palm contains an enormous blazing fireball.
+Five thick chunky fingers curve upward around it as fortified walls.
+Heavy stone reinforcement,
+massive structural elements and brutal physical defensive
+features are integrated throughout the hand architecture.
+The hand itself IS the tower architecture.""",
+        '5-electric': """A fully upgraded imposing magical tower
+formed entirely from a gigantic reinforced stone human hand emerging
+from the ground.
+The massive wrist and forearm form a broad solid foundation.
+The deeply cupped palm contains an enormous blazing fireball.
+Five thick chunky fingers curve upward around it as fortified walls.
+Crackling electric energy courses through the stone hand,
+with glowing lightning arcs and electrical elements integrated
+into its architecture.
+The hand itself IS the tower architecture.
 """
-    }
+}
     FEATURES = """
 deep black stone masonry,
 slightly weathered surface,
