@@ -216,3 +216,4 @@ ckpts/
 # Ignore generated images
 /*.png
 output/
+profile*.csv

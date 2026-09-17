@@ -18,6 +18,16 @@
 #     └── Lightning
 
 class Asset:
+    def __init__(self, type=''):
+            self.type = type
+
+    @property
+    def nametyped(self):
+        return self.__class__.__name__ + str(self.type)
+
+    def subject(self):
+        return self.SUBJECT[self.type]
+
     STYLE = """
 classic hand-painted fantasy game artwork,
 thick black outline around the main silhouette,
@@ -54,11 +64,14 @@ extreme contrast, neon colors, hard cel shading
         return self.__class__.__name__
 
     @property
-    def namelvl(self):
-        return self.__class__.__name__
+    def nametyped(self):
+        return self.__class__.__name__ + str(self.type)
 
     def subject(self):
-        return self.SUBJECT
+        return self.SUBJECT[self.type]
+
+    def camera(self):
+        return self.CAMERA
 
     def prompt(self):
         return f"""
@@ -71,7 +84,7 @@ KEY FEATURES:
 {self.FEATURES}
 
 CAMERA:
-{self.CAMERA}
+{self.camera()}
 
 COMPOSITION:
 {self.COMPOSITION}
@@ -81,16 +94,6 @@ COMPOSITION:
 # ======================
 #
 class UIAsset(Asset):
-    def __init__(self, type):
-            self.type = type
-
-    @property
-    def namelvl(self):
-        return self.__class__.__name__ + str(self.type)
-
-    def subject(self):
-        return self.SUBJECT[self.type]
-
     CAMERA = """
 flat front view
 """
@@ -114,16 +117,6 @@ painted material variation and edge highlights.
 # ======================
 #
 class Building(Asset):
-    def __init__(self, level: int):
-            self.level = level
-
-    @property
-    def namelvl(self):
-        return self.__class__.__name__ + "Lvl" + str(self.level)
-
-    def subject(self):
-        return self.SUBJECT[self.level]
-
     CAMERA = """
 elevated three-quarter view,
 slightly above the subject,
@@ -148,10 +141,44 @@ full body visible
 """
 
     COMPOSITION = """
-single isolated character,
-centered,
+character splits of a separate parts: legs, torso, head, arms and weapon,
+clean white background
+"""
+
+class UnitOrc(Unit):
+
+    def camera(self):
+        return self.type + " view," + self.CAMERA
+
+
+    SUBJECT = {
+        "Front":"""
+a large orc warrior front bird's view.
+""",
+        "Back":"""
+Eight frames sprite with a large orc warrior view from back.
+left leg stepping forward.
+"""
+    }
+
+    FEATURES = """
+broad muscular body,
+slightly exaggerated proportions,
+large tusks,
+dark green skin,
+heavy leather armor,
+large battle axe,
+muted red cloth accents,
 clear silhouette,
 clean white background
+"""
+
+    CAMERA = """
+strong perspective foreshortening,
+large foreground head and torso,
+legs receding and appearing shorter due to perspective.
+clear view of the complete effect,
+elevated perspective
 """
 
 # ======================
@@ -186,28 +213,34 @@ painted energy and atmospheric texture
 #
 class RoundIcon(UIAsset):
     SUBJECT = {
-        'archer':"""
+        'Archer':"""
 Wooden bow and arrow, green magical background,
 wooden and metal frame with rivets.
 """,
-        "rifle":"""
+        "Rifle":"""
 Wooden-and-metal rifle pointing diagonally upward, blue magical background,
-wooden and metal frame with rivets.
+Overlapping overlay.
+Wooden and metal frame with rivets.
+The rifle explicitly overlays and partially covers the outer
 """,
-        "cannon":"""
-Heavy dark-metal cannon with wooden and bronze fittings, firing a cannonball, fiery background,
-wooden and metal frame with rivets.
+        "Cannon":"""
+Heavy dark-metal cannon with wooden and bronze fittings, firing a cannonball,
+fiery background.
+Wooden and metal frame with rivets.
+The cannon and cannonball explicitly overlays and partially covers the outer.
 """,
-        "lightning":"""
+        "Lightning":"""
 Glowing metal orb emitting bright white-blue branching electric lightning,
 mounted on a small metal pedestal, deep blue background,
 wooden and metal frame with rivets.
 """,
-        "fire":"""
-Bright magical fireball with swirling flames and glowing embers,
-wooden and metal frame with rivets.
+        "Fire":"""
+Bright magical fireball with swirling flames and glowing embers falling tilted trajectory.
+Vivid fire yellow background, overlapping overlay.
+Wooden and metal frame with rivets.
+The flame explicitly overlays and partially covers the outer
 """,
-        "poison":"""
+        "Poison":"""
 Green poison flask tilted and inclined,
 it emits toxic bubbles and a poisonous skull-shaped cloud,
 vivid green background, overlapping overlay.
@@ -221,7 +254,7 @@ The toxic skull cloud explicitly overlays and partially covers the outer
 class ArcherTower(Building):
 
     SUBJECT={
-        1:"""
+        "Lvl1":"""
 A small makeshift medieval defensive barricade.
 The structure is acrude semi-circular breastwork
 built upon a low elevated dirt mound,
@@ -230,7 +263,7 @@ a simple gap-opening for access at the rear,
 an elevated wooden platform on timber stilts rising behind the stone wall,
 a single ragged blank cloth flag hanging from a wooden post.
 """,
-        2:"""
+        "Lvl2":"""
 A small makeshift medieval defensive barricade.
 The structure is acrude semi-circular breastwork
 built upon a low elevated dirt mound,
@@ -239,7 +272,7 @@ a simple gap-opening for access at the rear,
 an elevated wooden tower on timber stilts rising behind the stone wall,
 a single ragged blank cloth flag hanging from a wooden post.
 """,
-        3:"""
+        "Lvl3":"""
 A small medieval stone archer tower.
 The tower is a compact cylindrical stone fortress with thick chunky masonry,
 large irregular individual stone blocks,
@@ -247,7 +280,7 @@ a rounded wooden doorway at the front,
 sturdy battlements and crenellations at the top,
 and two blue heraldic cloth banners hanging from the sides.
 """,
-        4:"""
+        "Lvl4":"""
 A medieval stone archer tower with a large spherical wooden roof covering the entire tower.
 The tower is a compact cylindrical stone fortress with thick, chunky masonry
 and large irregular stone blocks.
@@ -255,14 +288,14 @@ A small wooden side tower is attached directly to one side.
 A rounded wooden doorway faces the front,
 with large blue heraldic cloth banners hanging from the sides.
 """,
-        5:"""
+        "Lvl5":"""
 A fully upgraded medieval stone archer tower with a massive spherical wooden roof covering the entire tower.
 The compact cylindrical fortress has thick reinforced masonry,
 large irregular stone blocks, additional defensive walls and platforms,
 and a small fortified side tower attached directly to one side.
 Multiple wooden supports, battlements and blue heraldic banners add detail.
 A rounded wooden doorway faces the front.""",
-        '5-fire':"""
+        '"Lvl5-fire':"""
 A fully upgraded medieval stone archer tower with a massive spherical red wood roof covering the entire tower.
 The compact cylindrical fortress has thick reinforced masonry,
 large irregular stone blocks, additional defensive walls and platforms,
@@ -270,7 +303,7 @@ and a small fortified side tower attached directly to one side.
 The tower is infused with magical fire, with glowing flames and fiery elements integrated into its architecture.
 Multiple wooden supports, battlements and blue heraldic banners add detail.
 """,
-        '5-poison':"""
+        '"Lvl5-poison':"""
 A fully upgraded medieval stone archer tower with a massive spherical green wood roof covering the entire tower.
 The compact cylindrical fortress has thick reinforced masonry,
 large irregular stone blocks covered in extensive toxic corrosion,
@@ -303,21 +336,21 @@ class HandTower(Building):
     #The hand itself IS the tower architecture, not a statue holding a structure.
 
     SUBJECT={
-        1: """
+        "Lvl1": """
 Large irregular stones arranged in a clear five-pointed pentagram,
 with a bright round magical fireball floating above the exact center.
 """,
-        2: """
+        "Lvl2": """
 Large irregular stones arranged in a clear five-pointed pentagram,
 with a bright round magical fireball floating above the exact center.
 Five thick stone fingers curve inward around the center,
 cradling the floating fireball.
 """,
-        3: """Large irregular stones arranged in a clear five-pointed pentagram
+        "Lvl3": """Large irregular stones arranged in a clear five-pointed pentagram
 forms thick chunky fingers, touching
 bright round magical fireball floating above the exact center.
 """,
-        4: """A developed magical tower formed entirely from a massive
+        "Lvl4": """A developed magical tower formed entirely from a massive
 stone human hand emerging from the ground. The reinforced wrist
 and forearm form a broad solid foundation. The deeply cupped
 upward-facing palm contains a powerful blazing fireball.
@@ -326,7 +359,7 @@ as fortified walls. Additional stone structures, platforms
 and wooden supports are integrated into the hand.
 The hand itself IS the tower architecture.
 """,
-        5: """A fully upgraded imposing magical tower formed
+        "Lvl5": """A fully upgraded imposing magical tower formed
 entirely from a gigantic stone human hand emerging from the ground.
 The massive reinforced wrist and forearm form a broad architectural
 foundation. The deeply cupped upward-facing palm contains
@@ -335,7 +368,7 @@ Five thick chunky fingers curve upward around the fireball
 as fortified protective walls. Reinforced stone structures,
 platforms, battlements and wooden supports are integrated
 into the hand. The hand itself IS the tower architecture.""",
-        '5-physical': """A fully upgraded imposing magical tower
+        'Lvl5-physical': """A fully upgraded imposing magical tower
 formed entirely from a gigantic reinforced stone human hand emerging
 from the ground. The massive wrist and forearm form
 a broad solid foundation.
@@ -345,7 +378,7 @@ Heavy stone reinforcement,
 massive structural elements and brutal physical defensive
 features are integrated throughout the hand architecture.
 The hand itself IS the tower architecture.""",
-        '5-electric': """A fully upgraded imposing magical tower
+        'Lvl5-electric': """A fully upgraded imposing magical tower
 formed entirely from a gigantic reinforced stone human hand emerging
 from the ground.
 The massive wrist and forearm form a broad solid foundation.
